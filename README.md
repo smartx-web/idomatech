@@ -14,7 +14,7 @@ Content is stored in R2 at `community/content.json`; enquiries are stored separa
 
 ## Access and publication
 
-The initial Site is owner-private. `PRIVATE_ADMIN=1` enables content administration behind that owner-only hosting boundary. **Before changing hosting access to public or shared**, remove `PRIVATE_ADMIN` and set `ADMIN_EMAILS` to a comma-separated list of authorised ChatGPT sign-in emails. Never enable `PRIVATE_ADMIN` on a public/shared deployment. Public-facing deployment requires the platform's trusted identity headers; do not trust client-supplied identity headers on another host. Enquiries currently rely on the private Site access boundary; add abuse protection before public rollout.
+The Site is public. Content administration requires ChatGPT sign-in and a server-side email allowlist configured through `ADMIN_EMAILS`. No shared password is embedded in the website. Trusted identity headers must come from Sites dispatch. Admin photo uploads support JPEG, PNG and WebP up to 5 MB and are stored in R2. Public enquiry submissions include a honeypot and a per-IP cooldown; this is basic abuse protection, not a full CAPTCHA service.
 
 ## Content to supply
 
