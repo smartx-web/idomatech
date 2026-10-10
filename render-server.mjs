@@ -11,17 +11,13 @@ export const server=http.createServer(async(req,res)=>{
  if(path.pathname==='/'&&req.method==='GET'){
  const response=await site.fetch(new Request('https://render.local/'),{});
  let html=await response.text();
+ html=html.replace(/<form id="join-form">[\s\S]*?<\/form>/,'<div><h3>Introduce yourself to ITC.</h3><p>Our membership enquiry form opens in the community’s secure contact area.</p><a class="btn" href="'+new URL('/#join',upstream).href+'">Open membership enquiries ↗</a></div>');
+ html=html.replace("$('#join-form').onsubmit=","const joinForm=$('#join-form');if(joinForm)joinForm.onsubmit=");
  html=html.replace('</body>',`<script>document.querySelector('#admin-open').onclick=()=>{location.href=${JSON.stringify(new URL('/admin',upstream).href)}};</script></body>`);
  return send(res,200,html,Object.fromEntries(response.headers));
  }
- if((path.pathname==='/api/content'&&req.method==='GET')||(path.pathname==='/api/enquiries'&&req.method==='POST')||(/^\/media\/[a-f0-9-]+\.(jpg|png|webp)$/.test(path.pathname)&&req.method==='GET')){
- let body;
- if(req.method==='POST'){
- const origin=req.headers.origin;const host=req.headers.host;
- if(!origin||new URL(origin).host!==host)return send(res,403,JSON.stringify({error:'Invalid request origin.'}),{'Content-Type':'application/json'});
- const chunks=[];let size=0;for await(const c of req){size+=c.length;if(size>10000)return send(res,413,JSON.stringify({error:'Request too large.'}),{'Content-Type':'application/json'});chunks.push(c)}body=Buffer.concat(chunks);
- }
- const response=await fetch(new URL(path.pathname,upstream),{method:req.method,headers:{'Content-Type':'application/json',Origin:upstream.origin},body,signal:AbortSignal.timeout(20000),redirect:'error'});
+ if((path.pathname==='/api/content'&&req.method==='GET')||(/^\/media\/[a-f0-9-]+\.(jpg|png|webp)$/.test(path.pathname)&&req.method==='GET')){
+ const response=await fetch(new URL(path.pathname,upstream),{method:req.method,headers:{'Content-Type':'application/json',Origin:upstream.origin},signal:AbortSignal.timeout(20000),redirect:'error'});
  const headers={'Content-Type':response.headers.get('Content-Type')||'application/octet-stream','Cache-Control':path.pathname.startsWith('/media/')?'public,max-age=31536000,immutable':'no-store'};
  return send(res,response.status,Buffer.from(await response.arrayBuffer()),headers);
  }
