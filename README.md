@@ -19,3 +19,8 @@ The Site is public. Content administration requires ChatGPT sign-in and a server
 ## Content to supply
 
 Confirmed executive, trustee and patron appointments; approved objectives and vision; real portraits and media URLs; community contact channels. No patron or trustee appointment is assumed. No automatic email delivery is configured.
+
+
+## Render hosting
+
+Render runs `npm start` with Node 22 or newer. Build: `npm run build && npm run validate`. The server binds `0.0.0.0:$PORT`; `/health` is its health endpoint. `CONTENT_ORIGIN` points to the existing public Sites publication. Render serves the application HTML from this repository and forwards public content, media and enquiries to the existing persistent service. Admin opens that service’s protected editing area; ChatGPT authentication remains there. Keep the content service live and public. This is a connected Render frontend, not a migration of stored content or administrator authentication.

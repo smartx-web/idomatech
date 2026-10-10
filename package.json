@@ -1,9 +1,13 @@
 {
-  "name": "sites-worker-esm-starter",
+  "name": "idomatech",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "bash scripts/build.sh",
-    "validate": "node scripts/validate-artifact.mjs"
+    "validate": "node scripts/validate-artifact.mjs",
+    "start": "node render-server.mjs"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
